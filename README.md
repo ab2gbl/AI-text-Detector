@@ -31,6 +31,6 @@ now we ready to run the website
 python manage.py runserver
 ```
 <div align="center">
-  <img width="100%" alt="horizontal aqua line" src="./pics/head.gif"  />
+  <img width="100%" alt="screenshot" src="./screenshot.png"  />
 </div>
 
