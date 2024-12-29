@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AI Detection</title>
+    <style>
+      /* Global styles */
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 10px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        background: linear-gradient(to bottom right, #222222, #222222);
+        color: #333;
+      }
+
+      /* Container styles */
+      .container {
+        background: #ffffff;
+        border-radius: 12px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        padding: 20px;
+        display: inline-block; /* Makes the container shrink-to-fit its content */
+        text-align: center;
+        max-width: 90%; /* Prevents the container from becoming too wide */
+        min-width: 70vw; /* Ensures the container doesn't get too small */
+        /*width: auto; /* Adjusts width based on content */
+      }
+
+      /* Heading styles */
+      h1 {
+        font-size: 24px;
+        margin-bottom: 10px;
+        color: #333;
+      }
+
+      h2 {
+        font-size: 20px;
+        margin-top: 20px;
+        color: #4facfe;
+      }
+
+      /* Textarea styles */
+      textarea {
+        width: 90%;
+        height: 40vh;
+        margin-top: 10px;
+        margin-bottom: 15px;
+        padding: 10px;
+        border: 2px solid #ddd;
+        border-radius: 8px;
+        font-size: 16px;
+        resize: both;
+        max-width: 95%;
+      }
+
+      textarea:focus {
+        border-color: #4facfe;
+        outline: none;
+        box-shadow: 0 0 5px rgba(79, 172, 254, 0.5);
+      }
+
+      /* Button styles */
+      button {
+        background: #4facfe;
+        color: #fff;
+        padding: 10px 20px;
+        font-size: 16px;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+      }
+
+      button:hover {
+        background: #3b9ad6;
+      }
+
+      /* Word count styles */
+      .word-count {
+        font-size: 14px;
+        margin-top: 10px;
+        color: #666;
+      }
+
+      /* Response output styles */
+      .response-box {
+        text-align: left;
+        background: #f7f7f7;
+        padding: 10px;
+        border-radius: 8px;
+        font-size: 14px;
+        line-height: 1.6;
+        word-wrap: break-word;
+        margin-top: 10px;
+      }
+
+      .response-box div {
+        margin-bottom: 10px; /* Space between sections */
+      }
+
+      .response-box b {
+        color: #333; /* Bold label color */
+      }
+
+      .response-box span {
+        color: #555; /* Text color */
+      }
+
+      /* Footer styles */
+      .footer {
+        margin-top: 20px;
+        font-size: 12px;
+        color: #666;
+      }
+
+      .footer a {
+        color: #4facfe;
+        text-decoration: none;
+      }
+
+      .footer a:hover {
+        text-decoration: underline;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>AI Detection</h1>
+      <p>Enter your article below and click "Send" to analyse it.</p>
+
+      <!-- Input field for the text -->
+      <textarea
+        id="inputText"
+        placeholder="Enter your text here..."
+        oninput="updateWordCount()"
+      ></textarea>
+      <div class="word-count" id="wordCount">Word count: 0</div>
+      <br />
+
+      <!-- Button to send request -->
+      <button onclick="sendRequest()">Send</button>
+
+      <h2>Response:</h2>
+
+      <div class="response-box">
+        <div>
+          <b>Type</b><br />
+          <span id="Type">No response yet.</span>
+        </div>
+        <div>
+          <b>AI score</b><br />
+          <span id="AI">No response yet.</span>
+        </div>
+        <div>
+          <b>Human score</b><br />
+          <span id="Human">No response yet.</span>
+        </div>
+      </div>
+
+      <!-- Footer -->
+      <div class="footer">
+        Created by
+        <a href="https://github.com/ab2gbl" target="_blank"
+          >Ayoub Abdessami guebli</a
+        >
+      </div>
+    </div>
+
+    <script>
+      // Function to update word count
+      function updateWordCount() {
+        const text = document.getElementById("inputText").value.trim();
+        const wordCount = text.length > 0 ? text.split(/\s+/).length : 0;
+        document.getElementById(
+          "wordCount"
+        ).textContent = `Word count: ${wordCount}`;
+      }
+
+      // Function to send request to the API
+      function sendRequest() {
+        const text = document.getElementById("inputText").value;
+
+        if (!text.trim()) {
+          alert("Please enter some text before sending.");
+          return;
+        }
+
+        const requestData = {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ text: text }),
+        };
+
+        document.getElementById("Type").textContent = "Loading...";
+        document.getElementById("AI").textContent = "Loading...";
+        document.getElementById("Human").textContent = "Loading...";
+
+        fetch("http://127.0.0.1:8000/detect/", requestData)
+          .then((response) => {
+            if (!response.ok) {
+              throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+            return response.json();
+          })
+          .then((data) => {
+            document.getElementById("Type").textContent = data["label"];
+            document.getElementById("AI").textContent = data["ai_count"];
+            document.getElementById("Human").textContent = data["human_count"];
+          })
+          .catch((error) => {
+            console.error("Error:", error);
+            alert(`Error: ${error.message}`);
+          });
+      }
+    </script>
+  </body>
+</html>
