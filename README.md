@@ -30,4 +30,7 @@ now we ready to run the website
 ```bash
 python manage.py runserver
 ```
-!screenshot(https://github.com/ab2gbl/Detector/blob/main/screenshot.png?raw=true)
+<div align="center">
+  <img width="100%" alt="horizontal aqua line" src="./pics/head.gif"  />
+</div>
+
