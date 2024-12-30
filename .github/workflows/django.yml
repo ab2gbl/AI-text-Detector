@@ -35,6 +35,8 @@ jobs:
         pip install kaggle  # Install the Kaggle CLI tool
         pip install kagglehub
         python ./download_model.py
+        mv /home/runner/.cache/kagglehub/models/abdessamiguebli/ai_detection_model_200k/pyTorch/default/1 ./ai_detection_model_200k/
+        ls ./ai_detection_model_200k
 
     - name: Install Dependencies
       run: |
