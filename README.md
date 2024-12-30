@@ -16,10 +16,8 @@ export NLTK_DATA=./env/nltk_data
 ```
 then python, tun the next code to download the 2 corpus: 
 
-```python
-import nltk
-nltk.download('brown')
-nltk.download('wordnet')
+```bash
+python ./install_corpus.py
 ```
 there is a problem on *wordnet* corpus , so we need to unzip it too , so we should execute the next command:
 
