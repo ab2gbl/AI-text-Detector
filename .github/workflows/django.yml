@@ -33,7 +33,7 @@ jobs:
     - name: Set up Kaggle API Credentials
       run: |
         mkdir -p ~/.kaggle
-        echo "${{ secrets.KAGGLE_JSON }}" > ~/.kaggle/kaggle.json
+        echo '{"username":"abdessamiguebli","key":"4b9b189a300ff865d868b7aff6c961bd"}' > ~/.kaggle/kaggle.json
         chmod 600 ~/.kaggle/kaggle.json
 
     - name: Download Trained Model from Kaggle
