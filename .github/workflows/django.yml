@@ -63,7 +63,4 @@ jobs:
         source ./env/bin/activate
         python manage.py test
 
-    - name: Run Server
-      run: |
-        source ./env/bin/activate
-        python manage.py runserver
+    
