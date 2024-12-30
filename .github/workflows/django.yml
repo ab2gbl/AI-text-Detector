@@ -1,0 +1,66 @@
+name: Django CI
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v4
+
+    - name: Set up Python
+      uses: actions/setup-python@v3
+      with:
+        python-version: 3.9  # Specify the Python version
+
+    - name: Create Virtual Environment
+      run: |
+        python -m venv env
+        source ./env/bin/activate
+
+    - name: Install Dependencies
+      run: |
+        source ./env/bin/activate
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+
+    - name: Set up Kaggle API Credentials
+      run: |
+        mkdir -p ~/.kaggle
+        echo '{"username":"abdessamiguebli","key":"4b9b189a300ff865d868b7aff6c961bd"}' > ~/.kaggle/kaggle.json
+        chmod 600 ~/.kaggle/kaggle.json
+
+    - name: Download Trained Model from Kaggle
+      run: |
+        source ./env/bin/activate
+        kaggle models download -m abdessamiguebli/ai_detection_model_200k
+        unzip ai_detection_model_200k.zip -d ./  # Extract the model into the repository directory
+
+    - name: Set up NLTK Corpus Path
+      run: |
+        export NLTK_DATA=./env/nltk_data
+        mkdir -p ./env/nltk_data
+
+    - name: Download NLTK Corpus
+      run: |
+        source ./env/bin/activate
+        python ./install_corpus.py
+
+    - name: Fix WordNet Corpus Issue
+      run: |
+        unzip ./env/nltk_data/corpora/wordnet.zip -d ./env/nltk_data/corpora/
+
+    - name: Run Tests
+      run: |
+        source ./env/bin/activate
+        python manage.py test
+
+    - name: Run Server
+      run: |
+        source ./env/bin/activate
+        python manage.py runserver
