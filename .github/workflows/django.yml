@@ -21,15 +21,7 @@ jobs:
     - name: Create Virtual Environment
       run: |
         python -m venv env
-        source ./env/bin/activate
-
-    - name: Install Dependencies
-      run: |
-        source ./env/bin/activate
-        python -m pip install --upgrade pip
-        pip install -r requirements.txt
-        pip install kaggle  # Install the Kaggle CLI tool
-        pip install kagglehub
+        source ./env/bin/activate    
 
     - name: Set up Kaggle API Credentials
       run: |
@@ -40,7 +32,15 @@ jobs:
     - name: Download Trained Model from Kaggle
       run: |
         source ./env/bin/activate
+        pip install kaggle  # Install the Kaggle CLI tool
+        pip install kagglehub
         python ./download_model.py
+
+    - name: Install Dependencies
+      run: |
+        source ./env/bin/activate
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
 
     - name: Set up NLTK Corpus Path
       run: |
