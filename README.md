@@ -2,7 +2,7 @@
 this is an application web for the model we trained to detect text is it AI-generated or Human-written.
 
 # setup 
-first you need to download the trained model ( will upload the link later ) and extract it inside this repo
+first you need to download [the trained model](https://www.kaggle.com/models/abdessamiguebli/ai_detection_model_200k/) and extract it inside this repo
 then you should install the requirements on your virtual environment ( search how to create virtual environment, it's not hard )
 
 ```bash
